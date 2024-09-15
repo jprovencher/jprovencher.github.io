@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Système national de réservation de voies</title>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+        lucide.createIcons();
+
+        const formatDate = (dateString) => {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        };
+
+        const locations = [
+            "Val-David",
+            "Kamouraska",
+            "Mont-Tremblant",
+            "Lac Long",
+            "Weir",
+            "Montmorency Falls",
+            "Pont-Rouge",
+            "La Malbaie",
+            "Mont-Orford",
+            "Percé"
+        ];
+
+        
+        const ReservationForm = () => {
+            const [name, setName] = useState('');
+            const [date, setDate] = useState('');
+            const [duration, setDuration] = useState('');
+            const [location, setLocation] = useState('');
+            const [showReservation, setShowReservation] = useState(false);
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                setShowReservation(true);
+            };
+
+            return (
+                <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
+                    <div className="relative py-3 sm:max-w-xl sm:mx-auto">
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+                        <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+                            <div className="max-w-md mx-auto">
+                                <div className="divide-y divide-gray-200">
+                                    <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
+                                        <h1 className="text-4xl font-extrabold text-gray-900 mb-4">Système national de réservation de voies</h1>
+                                        <p className="text-gray-600 mb-8">
+                                            Compte tenu de l'augmentation continue de la popularité du sport nous avons été dans l'obligation de 
+                                            mettre en place un système de réservations.</p>
+                                            <p className="text-gray-600 mb-8 text-xs">
+                                            * Si un conflit d'utilisation se produit, il vous suffira de présenter votre réservation pour assurer votre
+                                            droit de grimpe prioritaire.  Cette réservation vous permet par ailleurs de bloquer pour la journée complète 
+                                            une voie que vous l'utilisiez ou pas.  Plus besoin de laisser une corde inutilisée en moulinette ou une dégaine sur
+                                            la première bolt! 
+                                            </p><p>
+                                            Le sport évolue et nous aussi!
+                                        </p>
+                                        <h2 className="text-3xl font-extrabold text-gray-900 pt-8">Faire une réservation</h2>
+                                        {!showReservation ? (
+                                            <form onSubmit={handleSubmit} className="space-y-4">
+                                                <div>
+                                                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nom</label>
+                                                    <input
+                                                        type="text"
+                                                        id="name"
+                                                        value={name}
+                                                        onChange={(e) => setName(e.target.value)}
+                                                        required
+                                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label htmlFor="date" className="block text-sm font-medium text-gray-700">Date</label>
+                                                    <div className="mt-1 relative rounded-md shadow-sm">
+                                                        <input
+                                                            type="date"
+                                                            id="date"
+                                                            value={date}
+                                                            onChange={(e) => setDate(e.target.value)}
+                                                            required
+                                                            className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                        />
+                                                        <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                                            <i data-lucide="calendar" className="h-5 w-5 text-gray-400"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label htmlFor="duration" className="block text-sm font-medium text-gray-700">Durée (heures)</label>
+                                                    <input
+                                                        type="number"
+                                                        id="duration"
+                                                        value={duration}
+                                                        onChange={(e) => setDuration(e.target.value)}
+                                                        required
+                                                        min="1"
+                                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label htmlFor="location" className="block text-sm font-medium text-gray-700">Emplacement</label>
+                                                    <select
+                                                        id="location"
+                                                        value={location}
+                                                        onChange={(e) => setLocation(e.target.value)}
+                                                        required
+                                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                    >
+                                                        <option value="">Site de grimpe</option>
+                                                        {locations.map((loc) => (
+                                                            <option key={loc} value={loc}>{loc}</option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                                        Compléter la réservation
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        ) : (
+                                            <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+                                                <div className="px-4 py-5 sm:px-6">
+                                                    <h3 className="text-lg leading-6 font-medium text-gray-900">Reservation Confirmation</h3>
+                                                    <p className="mt-1 max-w-2xl text-sm text-gray-500">Your climbing reservation details.</p>
+                                                </div>
+                                                <div className="border-t border-gray-200">
+                                                    <dl>
+                                                        <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                                            <dt className="text-sm font-medium text-gray-500">Full name</dt>
+                                                            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{name}</dd>
+                                                        </div>
+                                                        <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                                            <dt className="text-sm font-medium text-gray-500">Date</dt>
+                                                            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{formatDate(date)}</dd>
+                                                        </div>
+                                                        <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                                            <dt className="text-sm font-medium text-gray-500">Duration</dt>
+                                                            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{duration} hours</dd>
+                                                        </div>
+                                                        <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                                            <dt className="text-sm font-medium text-gray-500">Location</dt>
+                                                            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{location}</dd>
+                                                        </div>
+                                                        <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                                            <dt className="text-sm font-medium text-gray-500">Confirmation number</dt>
+                                                            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{Math.random().toString(36).substr(2, 9).toUpperCase()}</dd>
+                                                        </div>
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="mt-8 text-center text-sm text-gray-500">
+                        <p>&copy; 2024 Système national de réservation de voies.</p>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<ReservationForm />, document.getElementById('root'));
+    </script>
+</body>
+</html>
